@@ -1,0 +1,65 @@
+# Yepp, it's just RPi that doing some stuff on button press (in my case it's played HOMM3 new week sound)
+#
+Download and write to SD-card latest raspbian lite image from official site:
+https://www.raspberrypi.org/downloads/raspbian/
+
+Boot up and configure your RPi with raspi-config utility.
+
+Install system and software updates with:
+$ sudo apt update && sudo apt upgrade -y
+
+Install cli-media-player:
+$ sudo apt install mpg123
+
+Make a project directory for all your files and scripts (mkdir -p %project_folder_name%, I don't think there's is a problem with that case)
+Copy your soundfile to RPi via scp utility or with your favorite way:
+$ scp %path/to/file% username@rpi_hostname:%fullpath/to/project_folder_name% # may require 'sudo'
+
+Install GPIO python modules:
+$ sudo apt install python-gpiozero python3-gpiozero
+#apt install python-rpi.gpio python3-rpi.gpio
+#(I didn't use this modules in my scripts)
+
+Check your RPi GPIO connectors via 'pinout' command. There's some pseudo-graphics output.
+We need just 1 GND and 1 GPIO.
+(on my RPi 1 model B: 6pin = GND, 7pin = GPIO)
+
+I prefer to connect any periferials when RPi power is off.
+(for safety reasons, or I'm some kind of paranoid)
+So shutdown rpi with:
+$ sudo poweroff now
+(you can skip 'sudo' when you run 'poweroff' directly on device, but via ssh-connection it's required)
+
+Connect your button to GND and GPIO connectors and boot RPi up again.
+
+Now we can create python-script like this one:
+(dash-lines are just the way to show the edges of our script)
+-----
+#!/usr/bin/python3
+import os
+from gpiozero import Button
+
+soundFile = "/path/to/soundfile.mp3"
+button = Button(4)
+
+while True:
+    if button.is_pressed:
+        os.system("mpg123 " + soundFile)
+    else:
+        pass
+-----
+
+We can set up our script to background running on each system startup.
+Create shell-script like this one:
+-----
+#!/bin/sh
+nohup /path/to/python-script.py >/dev/null 2>&1 &
+-----
+
+And add a rule into the our user's crontab (don't use 'sudo' here):
+$ crontab -e
+(choose your favorite editor)
+add string like:
+@reboot /path/to/shell-script.sh
+
+After next reboot we can just push the button to play our media-file.

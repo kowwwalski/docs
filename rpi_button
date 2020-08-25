@@ -3,7 +3,7 @@
 Download and write to SD-card latest raspbian lite image from official site:
 https://www.raspberrypi.org/downloads/raspbian/
 
-Boot up and configure your RPi with raspi-config utility.
+Boot up and configure your RPi with raspi-config utility (ssh, for example)
 
 Install system and software updates with:
 $ sudo apt update && sudo apt upgrade -y

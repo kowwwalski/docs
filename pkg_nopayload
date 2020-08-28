@@ -1,0 +1,24 @@
+1. Create folder with name "scripts"
+2. Copy all necessary files (if needed) into "scripts" folder
+3. Go to "scripts" folder via Terminal and run next command:
+----
+pico postinstall
+----
+4. Type or copy into editor your procedures, it will be your executable shell script, for example:
+----
+#!/bin/bash
+ntp="time.euro.apple.com"
+#
+sudo /usr/sbin/systemsetup -setusingnetworktime on
+sudo /usr/sbin/systemsetup -setnetworktimeserver "$ntp"
+#
+exit 0
+(the "exit 0" section is necessary in my case, and I think, it's a good practice to end script with positive exit-code)
+----
+5. Press Ctrl+X to exit from editor, when it prompts you about saving, press Y.
+6. Add execution permission to "postinstall" file via:
+----
+sudo chmod a+x postinstall
+----
+7. Create PKG via next command (use full paths):
+sudo pkgbuild --identifier com.package.name --nopayload --scripts /Users/your_user_name/your_folder/scripts/ "/Users/your_user_name/your_folder/your_package.pkg"

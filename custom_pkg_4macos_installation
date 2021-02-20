@@ -1,7 +1,0 @@
-For each additional application do this steps:
-1. Download the application DMG-file from it's official resource.
-2. Mount the application DMG-file and copy the .app package from mounted image to your machine.
-3. Re-pack the .app package to .pkg format via Terminal:
-productbuild --component /path/to/YourApplication.app /Applications/ /path/to/YourApplication.pkg
-4. Add YourApplication.pkg file to your system installation DMG Workflows directory (or create new DMG), for example:
-/Volumes/%YourDMG%/Deploy/Workflows/%ImageName%/Packages/
